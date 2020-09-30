@@ -1,0 +1,72 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+ * {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+html, body {
+    position: fixed; /* Needed to prevent scrolling; overflow: hidden isn't respected. */
+}
+@keyframes body-brighten {
+    0%      { background-color: hsl(0, 100%, 45%); }
+    100%    { background-color: hsl(0, 100%, 50%); } /* Match control panel */
+}
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    user-select: none;                          /* prevent copy paste, to allow, change 'none' to 'text' */
+    width: 100%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+	background-color: hsl(0, 100%, 45%);
+    transition: background-color .1s;
+}
+
+#info {
+    pointer-events: none; /* Allow touches to pass through to elements below. */
+    position: absolute;
+    width: 100%;
+    top: 0;
+    text-align: center;
+    color: hsl(0, 100%, 80%);
+    opacity: .8;
+    text-shadow: 0 0 0vw hsl(0, 100%, 80%);
+    transition: text-shadow .5s ease-out, top 1s cubic-bezier(.95,.05,.8,.04) 1s, opacity 2s ease-in;
+}
+#info h1 {
+    margin: 0;
+    font-size: 8vw;
+}
+#info h3 {
+    margin: 0;
+    font-size: 5vw;
+    font-weight: normal;
+}
+
+#controlPanel {
+    position: fixed;
+	left: 10%;
+	right: 10%;
+	top: 10%;
+    bottom: 10%;
+    border-radius: 2vh;
+    background-color: hsl(0, 100%, 50%);        /* Start with panel slightly lighter to stand out. */
+    box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
+    transition: background-color .05s, box-shadow .05s;
+}

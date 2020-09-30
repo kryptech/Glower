@@ -1,0 +1,17 @@
+{
+  "name": "name.kryptech.glowr",
+  "version": "1.0.0",
+  "displayName": "Glowr",
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-brightness": {}
+    }
+  },
+  "dependencies": {
+    "cordova-android": "9.0.0",
+    "cordova-plugin-brightness": "^0.2.0"
+  }
+}
