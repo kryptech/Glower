@@ -1,22 +1,9 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-var app = {
+Copyright (c) 2020 Chris M. Sissons
+https://github.com/kryptech/Glower
+*/
+
+const app = {
 
     // Config variables
     debugMode:          false,  // For development.
@@ -37,6 +24,7 @@ var app = {
             window.pBrightness = cordova.require('cordova-plugin-brightness.Brightness'); // https://github.com/mgcrea/cordova-plugin-brightness
         }
         catch(err) {
+            console.log('Error loading brightness plugin:');
             console.log(err.name + '; ' + err.message);
         }
         if (window.pBrightness) {
@@ -79,7 +67,7 @@ var app = {
         let cpRect = cpEl.getBoundingClientRect();
 
         let y = event.touches[0].pageY - cpRect.top;
-        var value = 1 - y / cpRect.height;
+        let value = 1 - y / cpRect.height;
         value = Math.round(value * 1000) / 1000; // Round to 3 decimal places.
         if (value < 0) {
             value = 0;
@@ -87,9 +75,10 @@ var app = {
             value = 1;
         }
         
-        var deadzoneBottom = (1 - app.middleDeadZone) / 2;
-        var deadzoneTop = deadzoneBottom + app.middleDeadZone;
-        var useValue;
+        // Determine the value to use based on the deadzones
+        const deadzoneBottom = (1 - app.middleDeadZone) / 2;
+        const deadzoneTop = deadzoneBottom + app.middleDeadZone;
+        let useValue;
         if (value <= deadzoneBottom) {
             useValue = value / (1 - app.middleDeadZone);
         } else if (value >= deadzoneTop) {
