@@ -20,12 +20,14 @@ body {
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
     user-select: none;                          /* prevent copy paste, to allow, change 'none' to 'text' */
     width: 100%;
+    margin: 0;
+    padding: 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 	background-color: hsl(0, 100%, 45%);
     transition: background-color .1s;
 }
 
-#info {
+#title {
     pointer-events: none; /* Allow touches to pass through to elements below. */
     position: absolute;
     width: 100%;
@@ -36,14 +38,27 @@ body {
     text-shadow: 0 0 0vw hsl(0, 100%, 80%);
     transition: text-shadow .5s ease-out, top 1s cubic-bezier(.95,.05,.8,.04) 1s, opacity 2s ease-in;
 }
-#info h1 {
+#title h1 {
     margin: 0;
     font-size: 8vw;
 }
-#info h3 {
+#title h3 {
     margin: 0;
     font-size: 5vw;
     font-weight: normal;
+}
+
+#closeContainer {
+    position: fixed;
+    width: 100%;
+    bottom: 2%;
+    text-align: center;
+}
+#closeButton {
+    font-size: 2em;
+    color: hsl(0, 0%, 0%);
+    opacity: .3;
+    transition: color 2s, opacity .1s;
 }
 
 #controlPanel {

@@ -37,13 +37,20 @@ const app = {
             );
         }
         
-        // Style info opening effects.
-        let infoEl = document.getElementById('info');
-        infoEl.style.opacity = 0;
-        infoEl.style.textShadow = '0 0 3vw hsl(0, 100%, 90%)'; // Larger and lighter.
-        infoEl.style.top = '-100vh'; // Move completely off the top of the screen.
+        // Style title's opening effects.
+        let titleEl = document.getElementById('title');
+        titleEl.style.opacity = 0;
+        titleEl.style.textShadow = '0 0 3vw hsl(0, 100%, 90%)'; // Larger and lighter.
+        titleEl.style.top = '-100vh'; // Move completely off the top of the screen.
         
-        // Listen for touches
+        // Make frame colour match control panel after a bit.
+        app.cpTimeoutId = setTimeout(
+            function() {
+                document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, 50%)'; // clEl.style.backgroundColour doesn't seem to work. :(
+            }, 10000
+        );
+
+        // Listen for control panel touches.
         let cpEl = document.getElementById('controlPanel');
         cpEl.addEventListener('touchstart', app.onTouch, false);
         cpEl.addEventListener('touchmove', app.onTouch, false);
@@ -51,12 +58,8 @@ const app = {
             cpEl.style.color = 'blue';
         }
 
-        // Make frame colour match control panel after a bit.
-        app.cpTimeoutId = setTimeout(
-            function() {
-                document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, 50%)'; // clEl.style.backgroundColour doesn't seem to work. :(
-            }, 10000
-        );
+        // Listen for close button touches
+        document.getElementById('closeButton').addEventListener('click', app.exitApp, false);
     },
     
 	onTouch: function(event) {
@@ -87,26 +90,36 @@ const app = {
             useValue = .5;
         }
         
-        let lightness = useValue * 100;
-        var brightness = value;
+        // Colour lightness
+        const lightness = useValue * 100;
+        
+        // Set control panel BG colour and border.
+        cpEl.style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
+        cpEl.style.boxShadow = '0 0 4vh 1vh hsl(0, 100%, ' + lightness + '%)';
+        
+        // Set body background colour.
+        document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
+
+        // Set close button colour to contrast.
+        let closeEl = document.getElementById('closeButton');
+        closeEl.style.color = 'hsl(0, 0%, ' + (lightness < 50 ? '100' : '0') + '%)';
+        const closeOpacity = (
+                (50 - Math.abs(lightness - 50)) // Invert to 0-1 range, with extremes lower
+                / (50 * 7) // Scale down
+            ) + (1 / 6); // Bump up so that it never is 0
+        closeEl.style.opacity = closeOpacity;
+
+        // Handle screen brightness
+        let brightness = value;
         if (value > (1 - app.middleDeadZone) / 2) { // This should use deadzoneBottom, but for some inscrutible reason it become 'undefined'.
             brightness = brightness * app.brightnessBoost;
             if (brightness > 1) {
                 brightness = 1;
             }
         }
-        
         if (app.debugMode) {
             cpEl.innerHTML = "value=" + value + "<br>useValue=" + useValue + "<br>brightness=" + brightness;
         }
-        
-        // Set control panel BG color and border.
-        cpEl.style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
-        cpEl.style.boxShadow = '0 0 4vh 1vh hsl(0, 100%, ' + lightness + '%)';
-        
-        // Set body background color.
-        document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
-        
         if (window.pBrightness) {
             pBrightness.setBrightness( // Set screen brightness
                 brightness,
@@ -115,6 +128,10 @@ const app = {
                 }
             );
         }
+    },
+
+    exitApp: function() {
+        navigator.app.exitApp();
     }
     
 };
