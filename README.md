@@ -9,7 +9,8 @@ You can install the built and unsigned app by copying the file _Glowr-unsigned.a
 ## Building
 Built with [PhoneGap](https://phonegap.com) 7.1.1. Currently targetting Android 30.
 Requires PhoneGap to be installed along with its prerequisits (npm, Android SDKs). Run `npm i` to download and install dependancies before you begin.
-You can debug by running `phonegap serve` and using the [PhoneGap Developer app](https://play.google.com/store/apps/details?id=com.adobe.phonegap.app) on your device to fetch the app over the network. This will allow you to get console info from the app.
+You'll also need the cordova-plugin-brightness which you can install with `phonegap plugin add cordova-plugin-brightness`.
+You can debug by running `phonegap serve` and using the [PhoneGap Developer app](https://play.google.com/store/apps/details?id=com.adobe.phonegap.app) on your device to fetch the app over the network. This will allow you to get console info from the app. Note that the brightness plugin might not work when testing this way.
 You can install a standalone copy by running `phonegap build android` from the command line. The APK file will be output to _platforms/android/app/build/outputs/apk/debug/_ You can deploy to your connected Android device by navigating your command line to that path and running `adb install app-debug.apk`, or you can open the APK from your device and install it.
 
 ## Author

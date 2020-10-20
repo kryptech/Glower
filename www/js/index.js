@@ -13,19 +13,19 @@ const app = {
 
     // Application Constructor
     initialize: function() {
-        console.log('initialize');
+        //console.log('initialize');
         document.addEventListener('deviceready', app.onDeviceReady, false);
     },
     
     onDeviceReady: function() {
-        console.log('deviceReady');
+        //console.log('deviceReady');
         
         try {
-            window.pBrightness = cordova.require('cordova-plugin-brightness.Brightness'); // https://github.com/mgcrea/cordova-plugin-brightness
+            window.pBrightness = cordova.plugins.brightness;
         }
         catch(err) {
             console.log('Error loading brightness plugin:');
-            console.log(err.name + '; ' + err.message);
+            console.log(JSON.stringify(err));
         }
         if (window.pBrightness) {
             pBrightness.setKeepScreenOn(true); // Keep screen on
@@ -33,8 +33,11 @@ const app = {
                 .5 * app.brightnessBoost,
                 function(status) { // Success
                 }, function(status) { // Error
+                    console.log('Failed to set brightness');
                 }
             );
+        } else {
+            console.log('Brightness plugin missing; this could happen if using `phonegap serve`:');
         }
         
         // Style title's opening effects.
