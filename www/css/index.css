@@ -55,6 +55,8 @@ body {
     text-align: center;
 }
 #closeButton {
+    display: inline-block;
+    padding: 0 .5em;
     font-size: 2em;
     color: hsl(0, 0%, 0%);
     opacity: .3;
