@@ -5,6 +5,7 @@ https://github.com/kryptech/Glower
 
 ## Installing
 You can install the built and unsigned app by copying the file _Glowr-unsigned.apk_ to your device and running it, or from the command line with `adb install Glowr-unsigned.apk`.
+Due to the version of PhoneGap the minimum supported version of Android is Lollipop 5.1 (SDK version 22).
 
 ## Building
 Built with [PhoneGap](https://phonegap.com) 7.1.1. Currently targetting Android 30.
