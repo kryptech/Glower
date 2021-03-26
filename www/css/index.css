@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 Chris M. Sissons
+Copyright (c) 2021 Chris M. Sissons
 https://github.com/kryptech/Glower
 */
 
@@ -10,10 +10,6 @@ https://github.com/kryptech/Glower
 html, body {
     position: fixed; /* Needed to prevent scrolling; overflow: hidden isn't respected. */
 }
-@keyframes body-brighten {
-    0%      { background-color: hsl(0, 100%, 45%); }
-    100%    { background-color: hsl(0, 100%, 50%); } /* Match control panel */
-}
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
@@ -23,10 +19,21 @@ body {
     margin: 0;
     padding: 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-	background-color: hsl(0, 100%, 45%);
+	background-color: hsl(0, 100%, 46%);
     transition: background-color .1s;
 }
-
+body.showHelp {
+    animation-name: lightDarkMid;
+    animation-delay: 6.05s; /* fadeUp + .05s */
+    animation-duration: 7s;
+    /*animation-fill-mode: forwards;*/
+}
+@keyframes lightDarkMid {
+    0% { background-color: hsl(0, 100%, 46%); }
+    40% { background-color: hsl(0, 100%, 70%); }
+    80% { background-color: hsl(0, 100%, 30%); }
+    100% { background-color: hsl(0, 100%, 46%); }
+}
 #title {
     pointer-events: none; /* Allow touches to pass through to elements below. */
     position: absolute;
@@ -34,9 +41,29 @@ body {
     top: 0;
     text-align: center;
     color: hsl(0, 100%, 80%);
-    opacity: .8;
+    opacity: .3;
     text-shadow: 0 0 0vw hsl(0, 100%, 80%);
-    transition: text-shadow .5s ease-out, top 1s cubic-bezier(.95,.05,.8,.04) 1s, opacity 2s ease-in;
+    animation-name: upAway;
+    animation-duration: 8s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+@keyframes upAway {
+    0% {
+        opacity: .3;
+        text-shadow: 0 0 0vw hsl(0, 100%, 80%);
+    }
+    10% {
+        opacity: .8;
+    }
+    30% {
+        top: 0;
+        text-shadow: 0 0 4vw hsl(0, 100%, 100%); /* Larger and lighter */
+    }
+    100% {
+        opacity: 0;
+        top: -100vh; /* Move completely off the top of the screen */
+    }
 }
 #title h1 {
     margin: 0;
@@ -46,6 +73,87 @@ body {
     margin: 0;
     font-size: 5vw;
     font-weight: normal;
+}
+
+#helpContainer {
+    display: grid;
+    position: fixed;
+    box-sizing: border-box;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 90vh; /* Don't cover the close button */
+    padding: 20%;
+    align-items: center;
+    color: hsl(0, 100%, 80%);
+    text-shadow: 0 0 .2rem hsl(0, 100%, 80%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 500ms;
+    animation-fill-mode: forwards;
+}
+#helpContainer.closing {
+    pointer-events: none; /* Allow touches to pass through to elements below. */
+    opacity: 0;
+}
+body.showHelp #helpContainer {
+    animation-name: fadeIn;
+    animation-delay: 3s;
+    animation-duration: 1s;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeOut {
+    0% {
+        top: 0;
+        opacity: 1;
+    }
+    99% {
+        top: 0;
+        opacity: 0;
+    }
+    100% { top: -100vh; }
+}
+#helpContainer h3 {
+    margin: 0;
+}
+#upArrow, #downArrow {
+    opacity: 0;
+    font-size: 3rem;
+}
+#upArrow {
+    padding-top: 8vh;
+    animation-name: fadeUp;
+    animation-delay: 6s;
+    animation-duration: 3s;
+}
+#downArrow {
+    padding-bottom: 8vh;
+    animation-name: fadeDown;
+    animation-delay: 9s; /* fadeUp + 3s */
+    animation-duration: 3s;
+}
+@keyframes fadeUp {
+    from {
+        padding: 8vh 0 0 0;
+        opacity: 1;
+    }
+    to {
+        padding: 0 0 8vh 0;
+        opacity: 0;
+    }
+}
+@keyframes fadeDown {
+    from {
+        padding: 0 0 8vh 0;
+        opacity: 1;
+    }
+    to {
+        padding: 8vh 0 0 0;
+        opacity: 0;
+    }
 }
 
 #closeContainer {
@@ -70,7 +178,30 @@ body {
 	top: 10%;
     bottom: 10%;
     border-radius: 2vh;
-    background-color: hsl(0, 100%, 50%);        /* Start with panel slightly lighter to stand out. */
+    background-color: hsl(0, 100%, 50%); /* Start with panel slightly lighter to stand out. */
     box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
     transition: background-color .05s, box-shadow .05s;
+}
+body.showHelp #controlPanel {
+    animation-name: lightDarkMidCP;
+    animation-delay: 6s; /* fadeUp */
+    animation-duration: 7s;
+}
+@keyframes lightDarkMidCP {
+    0% {
+        background-color: hsl(0, 100%, 50%);
+        box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
+    }
+    40% {
+        background-color: hsl(0, 100%, 70%);
+        box-shadow: 0 0 8vh 0 hsl(0, 100%, 70%);
+    }
+    80% {
+        background-color: hsl(0, 100%, 30%);
+        box-shadow: 0 0 8vh 0 hsl(0, 100%, 30%);
+    }
+    100% {
+        background-color: hsl(0, 100%, 50%);
+        box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
+    }
 }

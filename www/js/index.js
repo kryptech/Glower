@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 Chris M. Sissons
+Copyright (c) 2021 Chris M. Sissons
 https://github.com/kryptech/Glower
 */
 
@@ -9,23 +9,21 @@ const app = {
     debugMode:          false,  // For development.
     middleDeadZone:     .25,    // .5 = 50% of control panel height.
     brightnessBoost:    1.4,    // Make brightness increase faster.
-    cpTimeoutId:        0,      // For cancelling control panel fade.
+    cpEl:               undefined,
 
     // Application Constructor
     initialize: function() {
-        //console.log('initialize');
         document.addEventListener('deviceready', app.onDeviceReady, false);
     },
     
     onDeviceReady: function() {
-        //console.log('deviceReady');
         
+        // Set up brightness
         try {
             window.pBrightness = cordova.plugins.brightness;
         }
         catch(err) {
-            console.log('Error loading brightness plugin:');
-            console.log(JSON.stringify(err));
+            alert('Error loading brightness plugin:\n' + JSON.stringify(err));
         }
         if (window.pBrightness) {
             pBrightness.setKeepScreenOn(true); // Keep screen on
@@ -33,48 +31,84 @@ const app = {
                 .5 * app.brightnessBoost,
                 function(status) { // Success
                 }, function(status) { // Error
-                    console.log('Failed to set brightness');
+                    alert('Failed to set brightness');
                 }
             );
         } else {
-            console.log('Brightness plugin missing; this could happen if using `phonegap serve`:');
+            console.log('Brightness plugin missing; this could happen if using `phonegap serve`');
         }
-        
-        // Style title's opening effects.
-        let titleEl = document.getElementById('title');
-        titleEl.style.opacity = 0;
-        titleEl.style.textShadow = '0 0 3vw hsl(0, 100%, 90%)'; // Larger and lighter.
-        titleEl.style.top = '-100vh'; // Move completely off the top of the screen.
-        
-        // Make frame colour match control panel after a bit.
-        app.cpTimeoutId = setTimeout(
-            function() {
-                document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, 50%)'; // clEl.style.backgroundColour doesn't seem to work. :(
-            }, 10000
-        );
 
-        // Listen for control panel touches.
-        let cpEl = document.getElementById('controlPanel');
-        cpEl.addEventListener('touchstart', app.onTouch, false);
-        cpEl.addEventListener('touchmove', app.onTouch, false);
+        // Listen for control panel touches
+        app.cpEl = document.getElementById('controlPanel');
+        app.cpEl.addEventListener('touchstart', app.onTouchCP, false);
+        app.cpEl.addEventListener('touchmove', app.onTouchCP, false);
         if (app.debugMode) {
-            cpEl.style.color = 'blue';
+            app.cpEl.style.color = 'blue';
+        }
+        
+        const hcEl = document.getElementById('helpContainer');
+        const bodyEl = document.getElementById('body');
+
+        // Check if help has been previously shown
+        let helpShown = false;
+        try {
+            helpShown = window.localStorage.getItem('helpShown') === '1';
+        } catch(e) {
+            console.log('Error accessing localStorage');
         }
 
+        // Handle help
+        if (helpShown) {
+            // Prevent initial animation
+            bodyEl.classList.remove('showHelp');
+            hcEl.remove();
+        } else {
+            // Listen for animation progress
+            hcEl.addEventListener('animationend', () => {
+                if (!hcEl.classList.contains('done') && !hcEl.classList.contains('closing')) {
+                    // Inital animation done
+                    hcEl.classList.add('done'); // Mark as done and ready to close
+                } else if (hcEl.classList.contains('closing')) {
+                    // Closing animation done
+                    hcEl.remove();
+                }
+            });
+
+            // Handle touches
+            hcEl.addEventListener('touchstart', event => {
+                if (!hcEl.classList.contains('closing')) { // Not currently closing
+                    // Dismiss help
+                    hcEl.classList.remove('done');
+                    hcEl.classList.add('closing'); // Trigger closing animation
+                    bodyEl.classList.remove('showHelp'); // End colour animation
+                    
+                    // Mark help as having been shown
+                    if (!app.debugMode) {
+                        try {
+                            window.localStorage.setItem('helpShown', '1');
+                        } catch(e) {}
+                    }
+                    
+                    app.onTouchCP(event); // Pass along event to control panel
+                }
+            }, false);
+            hcEl.addEventListener('touchmove', event => {
+                app.onTouchCP(event); // Pass along event to control panel
+            });
+        }
+        
         // Listen for close button touches
         document.getElementById('closeButton').addEventListener('click', app.exitApp, false);
     },
-    
-	onTouch: function(event) {
-        
-        clearTimeout(app.cpTimeoutId); // Prevent frame colour from changing anymore.
 
-        let cpEl = event.target;
-        let cpRect = cpEl.getBoundingClientRect();
+	// Handle control panel touches
+    onTouchCP: function(event) {
 
-        let y = event.touches[0].pageY - cpRect.top;
+        const cpRect = app.cpEl.getBoundingClientRect();
+
+        const y = event.touches[0].pageY - cpRect.top;
         let value = 1 - y / cpRect.height;
-        value = Math.round(value * 1000) / 1000; // Round to 3 decimal places.
+        value = Math.round(value * 1000) / 1000; // Round to 3 decimal places
         if (value < 0) {
             value = 0;
         } else if (value > 1) {
@@ -97,8 +131,8 @@ const app = {
         const lightness = useValue * 100;
         
         // Set control panel BG colour and border.
-        cpEl.style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
-        cpEl.style.boxShadow = '0 0 4vh 1vh hsl(0, 100%, ' + lightness + '%)';
+        app.cpEl.style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
+        app.cpEl.style.boxShadow = '0 0 4vh 1vh hsl(0, 100%, ' + lightness + '%)';
         
         // Set body background colour.
         document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
@@ -121,7 +155,7 @@ const app = {
             }
         }
         if (app.debugMode) {
-            cpEl.innerHTML = "value=" + value + "<br>useValue=" + useValue + "<br>brightness=" + brightness;
+            app.cpEl.innerHTML = "value=" + value + "<br>useValue=" + useValue + "<br>brightness=" + brightness;
         }
         if (window.pBrightness) {
             pBrightness.setBrightness( // Set screen brightness
