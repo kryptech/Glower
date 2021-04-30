@@ -6,10 +6,13 @@ https://github.com/kryptech/Glower
 const app = {
 
     // Config variables
-    debugMode:          false,  // For development.
-    middleDeadZone:     .25,    // .5 = 50% of control panel height.
-    brightnessBoost:    1.4,    // Make brightness increase faster.
-    cpEl:               undefined,
+    /** For development */
+    debugMode:          false,
+    /** .5 = 50% of control panel height */
+    middleDeadZone:     .25,
+    /** Make brightness increase faster */
+    brightnessBoost:    1.4,
+    ctrlPanelEl:        undefined,
 
     // Application Constructor
     initialize: function() {
@@ -39,60 +42,60 @@ const app = {
         }
 
         // Listen for control panel touches
-        app.cpEl = document.getElementById('controlPanel');
-        app.cpEl.addEventListener('touchstart', app.onTouchCP, false);
-        app.cpEl.addEventListener('touchmove', app.onTouchCP, false);
+        app.ctrlPanelEl = document.getElementById('controlPanel');
+        app.ctrlPanelEl.addEventListener('touchstart', app.onTouchCP, false);
+        app.ctrlPanelEl.addEventListener('touchmove', app.onTouchCP, false);
         if (app.debugMode) {
-            app.cpEl.style.color = 'blue';
+            app.ctrlPanelEl.style.color = 'blue';
         }
         
-        const hcEl = document.getElementById('helpContainer');
+        const guideContEl = document.getElementById('demoContainer');
         const bodyEl = document.getElementById('body');
 
-        // Check if help has been previously shown
-        let helpShown = false;
+        // Check if guide has been previously shown
+        let guideShown = false;
         try {
-            helpShown = window.localStorage.getItem('helpShown') === '1';
+            guideShown = window.localStorage.getItem('guideShown') === '1';
         } catch(e) {
             console.log('Error accessing localStorage');
         }
 
-        // Handle help
-        if (helpShown) {
+        // Handle guide
+        if (guideShown) {
             // Prevent initial animation
-            bodyEl.classList.remove('showHelp');
-            hcEl.remove();
+            bodyEl.classList.remove('showGuide');
+            guideContEl.remove();
         } else {
             // Listen for animation progress
-            hcEl.addEventListener('animationend', () => {
-                if (!hcEl.classList.contains('done') && !hcEl.classList.contains('closing')) {
+            guideContEl.addEventListener('animationend', () => {
+                if (!guideContEl.classList.contains('done') && !guideContEl.classList.contains('closing')) {
                     // Inital animation done
-                    hcEl.classList.add('done'); // Mark as done and ready to close
-                } else if (hcEl.classList.contains('closing')) {
+                    guideContEl.classList.add('done'); // Mark as done and ready to close
+                } else if (guideContEl.classList.contains('closing')) {
                     // Closing animation done
-                    hcEl.remove();
+                    guideContEl.remove();
                 }
             });
 
             // Handle touches
-            hcEl.addEventListener('touchstart', event => {
-                if (!hcEl.classList.contains('closing')) { // Not currently closing
-                    // Dismiss help
-                    hcEl.classList.remove('done');
-                    hcEl.classList.add('closing'); // Trigger closing animation
-                    bodyEl.classList.remove('showHelp'); // End colour animation
+            guideContEl.addEventListener('touchstart', event => {
+                if (!guideContEl.classList.contains('closing')) { // Not currently closing
+                    // Dismiss guide
+                    guideContEl.classList.remove('done');
+                    guideContEl.classList.add('closing'); // Trigger closing animation
+                    bodyEl.classList.remove('showGuide'); // End colour animation
                     
-                    // Mark help as having been shown
+                    // Mark guide as having been shown
                     if (!app.debugMode) {
                         try {
-                            window.localStorage.setItem('helpShown', '1');
+                            window.localStorage.setItem('guideShown', '1');
                         } catch(e) {}
                     }
                     
                     app.onTouchCP(event); // Pass along event to control panel
                 }
             }, false);
-            hcEl.addEventListener('touchmove', event => {
+            guideContEl.addEventListener('touchmove', event => {
                 app.onTouchCP(event); // Pass along event to control panel
             });
         }
@@ -104,9 +107,10 @@ const app = {
 	// Handle control panel touches
     onTouchCP: function(event) {
 
-        const cpRect = app.cpEl.getBoundingClientRect();
+        const cpRect = app.ctrlPanelEl.getBoundingClientRect();
 
         const y = event.touches[0].pageY - cpRect.top;
+        /** 0 to 1 */
         let value = 1 - y / cpRect.height;
         value = Math.round(value * 1000) / 1000; // Round to 3 decimal places
         if (value < 0) {
@@ -127,12 +131,12 @@ const app = {
             useValue = .5;
         }
         
-        // Colour lightness
+        /** Colour lightness (for HSL) */
         const lightness = useValue * 100;
         
         // Set control panel BG colour and border.
-        app.cpEl.style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
-        app.cpEl.style.boxShadow = '0 0 4vh 1vh hsl(0, 100%, ' + lightness + '%)';
+        app.ctrlPanelEl.style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
+        app.ctrlPanelEl.style.boxShadow = '0 0 4vh 1vh hsl(0, 100%, ' + lightness + '%)';
         
         // Set body background colour.
         document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
@@ -141,12 +145,13 @@ const app = {
         let closeEl = document.getElementById('closeButton');
         closeEl.style.color = 'hsl(0, 0%, ' + (lightness < 50 ? '100' : '0') + '%)';
         const closeOpacity = (
-                (50 - Math.abs(lightness - 50)) // Invert to 0-1 range, with extremes lower
-                / (50 * 7) // Scale down
+                (50 - Math.abs(lightness - 50)) // Invert to 0-1 range, with middle being 1 and top/bottom being 0
+                / (50 * 7) // Scale down so never 1
             ) + (1 / 6); // Bump up so that it never is 0
         closeEl.style.opacity = closeOpacity;
 
         // Handle screen brightness
+        /** 0 to 1 */
         let brightness = value;
         if (value > (1 - app.middleDeadZone) / 2) { // This should use deadzoneBottom, but for some inscrutible reason it become 'undefined'.
             brightness = brightness * app.brightnessBoost;
@@ -155,7 +160,7 @@ const app = {
             }
         }
         if (app.debugMode) {
-            app.cpEl.innerHTML = "value=" + value + "<br>useValue=" + useValue + "<br>brightness=" + brightness;
+            app.ctrlPanelEl.innerHTML = "value=" + value + "<br>useValue=" + useValue + "<br>brightness=" + brightness;
         }
         if (window.pBrightness) {
             pBrightness.setBrightness( // Set screen brightness

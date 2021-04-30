@@ -22,7 +22,7 @@ body {
 	background-color: hsl(0, 100%, 46%);
     transition: background-color .1s;
 }
-body.showHelp {
+body.showGuide {
     animation-name: lightDarkMid;
     animation-delay: 6.05s; /* fadeUp + .05s */
     animation-duration: 7s;
@@ -75,7 +75,7 @@ body.showHelp {
     font-weight: normal;
 }
 
-#helpContainer {
+#demoContainer {
     display: grid;
     position: fixed;
     box-sizing: border-box;
@@ -92,11 +92,11 @@ body.showHelp {
     transition: opacity 500ms;
     animation-fill-mode: forwards;
 }
-#helpContainer.closing {
+#demoContainer.closing {
     pointer-events: none; /* Allow touches to pass through to elements below. */
     opacity: 0;
 }
-body.showHelp #helpContainer {
+body.showGuide #demoContainer {
     animation-name: fadeIn;
     animation-delay: 3s;
     animation-duration: 1s;
@@ -116,7 +116,7 @@ body.showHelp #helpContainer {
     }
     100% { top: -100vh; }
 }
-#helpContainer h3 {
+#demoContainer h3 {
     margin: 0;
 }
 #upArrow, #downArrow {
@@ -182,7 +182,7 @@ body.showHelp #helpContainer {
     box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
     transition: background-color .05s, box-shadow .05s;
 }
-body.showHelp #controlPanel {
+body.showGuide #controlPanel {
     animation-name: lightDarkMidCP;
     animation-delay: 6s; /* fadeUp */
     animation-duration: 7s;
