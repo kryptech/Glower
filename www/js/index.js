@@ -13,6 +13,8 @@ const app = {
     /** Make brightness increase faster */
     brightnessBoost:    1.4,
     ctrlPanelEl:        undefined,
+    /** Increment this to re-show the guide in new versions */
+    guideShownValue:    '2',
 
     // Application Constructor
     initialize: function() {
@@ -55,7 +57,7 @@ const app = {
         // Check if guide has been previously shown
         let guideShown = false;
         try {
-            guideShown = window.localStorage.getItem('guideShown') === '1';
+            guideShown = window.localStorage.getItem('guideShown') === app.guideShownValue;
         } catch(e) {
             console.log('Error accessing localStorage');
         }
@@ -88,7 +90,7 @@ const app = {
                     // Mark guide as having been shown
                     if (!app.debugMode) {
                         try {
-                            window.localStorage.setItem('guideShown', '1');
+                            window.localStorage.setItem('guideShown', app.guideShownValue);
                         } catch(e) {}
                     }
                     
