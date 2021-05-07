@@ -102,6 +102,10 @@ const app = {
             });
         }
         
+        // Listen for info button touches
+        document.getElementById('infoButton').addEventListener('click', app.toggleShowInfo, false);
+        document.getElementById('closeInfoButton').addEventListener('click', app.toggleShowInfo, false);
+        
         // Listen for close button touches
         document.getElementById('closeButton').addEventListener('click', app.exitApp, false);
     },
@@ -175,6 +179,11 @@ const app = {
                 }
             );
         }
+    },
+
+    toggleShowInfo: function() {
+        const bodyEl = document.getElementById("body");
+        bodyEl.classList.toggle("showInfo");
     },
 
     exitApp: function() {

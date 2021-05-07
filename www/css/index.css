@@ -34,46 +34,6 @@ body.showGuide {
     80% { background-color: hsl(0, 100%, 30%); }
     100% { background-color: hsl(0, 100%, 46%); }
 }
-#title {
-    pointer-events: none; /* Allow touches to pass through to elements below. */
-    position: absolute;
-    width: 100%;
-    top: 0;
-    text-align: center;
-    color: hsl(0, 100%, 80%);
-    opacity: .3;
-    text-shadow: 0 0 0vw hsl(0, 100%, 80%);
-    animation-name: upAway;
-    animation-duration: 8s;
-    animation-timing-function: ease-in;
-    animation-fill-mode: forwards;
-}
-@keyframes upAway {
-    0% {
-        opacity: .3;
-        text-shadow: 0 0 0vw hsl(0, 100%, 80%);
-    }
-    10% {
-        opacity: .8;
-    }
-    30% {
-        top: 0;
-        text-shadow: 0 0 4vw hsl(0, 100%, 100%); /* Larger and lighter */
-    }
-    100% {
-        opacity: 0;
-        top: -100vh; /* Move completely off the top of the screen */
-    }
-}
-#title h1 {
-    margin: 0;
-    font-size: 8vw;
-}
-#title h3 {
-    margin: 0;
-    font-size: 5vw;
-    font-weight: normal;
-}
 
 #demoContainer {
     display: grid;
@@ -82,8 +42,8 @@ body.showGuide {
     left: 0;
     right: 0;
     top: 0;
-    height: 90vh; /* Don't cover the close button */
-    padding: 20%;
+    bottom: 0;
+    padding: 9vh;
     align-items: center;
     color: hsl(0, 100%, 80%);
     text-shadow: 0 0 .2rem hsl(0, 100%, 80%);
@@ -209,10 +169,10 @@ body.showInfo .btnFaint {
 
 #controlPanel {
     position: fixed;
-	left: 10%;
-	right: 10%;
-	top: 10%;
-    bottom: 10%;
+	left: 9vh;
+	right: 9vh;
+	top: 9vh;
+    bottom: 9vh;
     border-radius: 2vh;
     background-color: hsl(0, 100%, 50%); /* Start with panel slightly lighter to stand out. */
     box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
@@ -240,4 +200,56 @@ body.showGuide #controlPanel {
         background-color: hsl(0, 100%, 50%);
         box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
     }
+}
+
+#infoBox {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    position: fixed;
+	left: 0;
+	right: 0;
+	top: -100vh;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0;
+    padding: 11vh;
+    color: hsl(0, 100%, 80%);
+    background-color: hsla(0, 100%, 30%, .7);
+    /* "Dead zone" border */
+    box-shadow: 0 0 .2em 9vh hsla(0, 0%, 0%, .3) inset;
+    box-sizing: border-box;
+    transition: all 100ms ease-in;
+}
+/* Reveal info box if body has class */
+body.showInfo #infoBox {
+    top: 0vh;
+    opacity: 1;
+}
+#infoBox a {
+    color: hsl(240, 80%, 90%);
+}
+#infoBox h1, #infoBox h2 {
+    margin-bottom: 0;
+}
+#infoBox ul {
+    padding-left: 1rem;
+}
+#infoBox .content {
+    flex-grow: 1;
+    overflow: auto;
+    border-top: solid 3px hsla(0, 0%, 0%, .2);
+    border-bottom: solid 3px hsla(0, 0%, 0%, .2);
+}
+#closeInfoBtnContainer {
+    display: flex;
+    padding: .5em;
+}
+#closeInfoButton {
+    margin: auto;
+    padding: .5em;
+    font-size: 1.3em;
+    text-align: center;
+    color: hsl(0, 100%, 80%);
+    background: hsla(0, 100%, 20%, .8);
 }
