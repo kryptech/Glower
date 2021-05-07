@@ -148,15 +148,12 @@ const app = {
         document.getElementById('body').style.backgroundColor = 'hsl(0, 100%, ' + lightness + '%)';
 
         // Adjust buttons opacity to keep them faintly visible
-        const btnOpacity = (
-                (50 - Math.abs(lightness - 50)) // Invert to 0-1 range, with middle being 1 and top/bottom being 0
-                / (50 * 7) // Scale down so never 1
-            ) + (1 / 5); // Bump up so that it never is 0
+        // Opacity is greatest slightly below the middle, least at the top/bottom
+        const btnOpacity = (1 - Math.abs(.35 - useValue)) * .3 + .1;
         const btnEls = document.getElementsByClassName('btnFaint');
         for (let btnEl of btnEls) {
             // Set button colour to contrast
-            btnEl.style.color = 'hsl(0, 0%, ' + (lightness < 50 ? '100' : '0') + '%)';
-            btnEl.style.opacity = btnOpacity;
+            btnEl.style.color = `hsla(0, 0%, ${ lightness < 50 ? 100 : 0}%, ${btnOpacity})`;
         }
 
         // Handle screen brightness

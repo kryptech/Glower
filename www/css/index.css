@@ -130,30 +130,28 @@ body.showGuide #demoContainer {
     width: 1.4em;
     height: 1.4em;
     border-radius: 100%;
-    animation: glowFade 5s linear;
+    animation: glowFade 4s linear;
     padding: 0 .5em;
     font-size: 1.5em;
-    color: hsl(0, 0%, 0%);
-    opacity: .3;
-    transition: color 1s, opacity .1s;
+    color: hsla(0, 0%, 0%, .3);
+    transition: color 1s;
 }
 body.showInfo .btnFaint {
-    opacity: .7 !important;
-    color: hsl(0, 0%, 90%) !important;
+    color: hsl(0, 0%, 90%, .8) !important;
 }
 
 @keyframes glowFade {
     0% {
-        background: hsl(0, 100%, 90%, .6);
-        box-shadow: 0 0 .4rem .3rem hsl(0, 100%, 90%, .6);
+        background: hsl(0, 100%, 70%, .1);
+        box-shadow: 0 0 .4rem .3rem hsl(0, 100%, 70%, .1);
     }
     50% {
-        background: hsl(0, 100%, 100%, 1);
-        box-shadow: 0 0 1.6rem 1.2rem hsl(0, 100%, 100%, 1);
+        background: hsl(0, 100%, 70%, .7);
+        box-shadow: 0 0 1.6rem 1.2rem hsl(0, 100%, 70%, .7);
     }
     100% {
-        background: hsla(0, 100%, 90%, 0);
-        box-shadow: 0 0 .2rem .15rem hsla(0, 100%, 90%, 0);
+        background: hsla(0, 100%, 70%, 0);
+        box-shadow: 0 0 .2rem .15rem hsla(0, 100%, 70%, 0);
     }
 }
 
