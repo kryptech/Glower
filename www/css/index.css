@@ -120,7 +120,7 @@ body.showGuide #demoContainer {
     display: flex;
     position: fixed;
     width: 100%;
-    height: 9vh;
+    height: 6vh;
     text-align: center;
     z-index: 2;
 }
@@ -167,11 +167,11 @@ body.showInfo .btnFaint {
 
 #controlPanel {
     position: fixed;
-	left: 9vh;
-	right: 9vh;
-	top: 9vh;
-    bottom: 9vh;
-    border-radius: 2vh;
+	left: 6vh;
+	right: 6vh;
+	top: 6vh;
+    bottom: 6vh;
+    border-radius: 4vh;
     background-color: hsl(0, 100%, 50%); /* Start with panel slightly lighter to stand out. */
     box-shadow: 0 0 8vh 0 hsl(0, 100%, 50%);
     transition: background-color .05s, box-shadow .05s;
@@ -211,11 +211,11 @@ body.showGuide #controlPanel {
     height: 100%;
     overflow: hidden;
     opacity: 0;
-    padding: 11vh;
+    padding: 8vh;
     color: hsl(0, 100%, 80%);
     background-color: hsla(0, 100%, 30%, .7);
     /* "Dead zone" border */
-    box-shadow: 0 0 .2em 9vh hsla(0, 0%, 0%, .3) inset;
+    box-shadow: 0 0 .2em 6vh hsla(0, 0%, 0%, .3) inset;
     box-sizing: border-box;
     transition: all 100ms ease-in;
 }
