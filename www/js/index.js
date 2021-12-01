@@ -22,6 +22,14 @@ const app = {
     },
     
     onDeviceReady: function() {
+
+        // Hook default window opener to plugin
+        try {
+            window.open = cordova.InAppBrowser.open;
+        }
+        catch(err) {
+            alert('Error loading InAppBrowser plugin:\n' + JSON.stringify(err));
+        }
         
         // Set up brightness
         try {
