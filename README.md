@@ -1,4 +1,4 @@
-# Glowr
+# Glowr Light
 ### Illuminate the darkness with adjustable red screen glow.
 This was inspired by the desire for a super-simple app that would use the screen as light for reading at night, and using red light to be gentle on night vision. No permissions are required.
 https://github.com/kryptech/Glower
