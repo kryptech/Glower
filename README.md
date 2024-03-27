@@ -8,7 +8,7 @@ You can install the built and unsigned app by copying the file _Glowr-unsigned.a
 Due to the version of PhoneGap the minimum supported version of Android is Lollipop 5.1 (SDK version 22).
 
 ## Building
-Built with [PhoneGap](https://phonegap.com) 7.1.1. Currently targetting Android 29.
+Built with [PhoneGap](https://phonegap.com) 7.1.1. Currently targetting Android 33 (`<preference name="android-targetSdkVersion" value="x" />` in config.xml).
 Requires PhoneGap to be installed along with its prerequisits (npm, Android SDKs). Run `npm i` to download and install dependancies before you begin.
 You'll also need the [cordova-plugin-brightness](https://github.com/mgcrea/cordova-plugin-brightness) which you can install with `phonegap plugin add cordova-plugin-brightness`.
 You'll also need the [cordova-plugin-inappbrowser](https://github.com/apache/cordova-plugin-inappbrowser) which you can install with `phonegap plugin add cordova-plugin-inappbrowser`.
