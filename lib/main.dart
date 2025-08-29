@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    WakeLockPlus.enable();
+    WakelockPlus.enable();
     return MaterialApp(
       theme: ThemeData(
         // This is the theme of your application.
