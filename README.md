@@ -6,7 +6,7 @@ https://github.com/kryptech/Glower
 ## Installing
 [Google Play](https://play.google.com/store/apps/details?id=name.kryptech.glowr)
 
-## Building
+## Running Locally
 You'll need the Flutter environment set up - see https://flutter.dev
 Clone the repo from https://github.com/kryptech/Glower
 Run `flutter get pub` to install dependencies
