@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
   final String version = '1.2.2';
-  final String link = 'https://github.com/kryptech/Glower';
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +18,8 @@ class AboutPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Illuminate the darkness with adjustable red screen glow.\nv$version\nBy Chris M. Sissons',
+              'Illuminate the darkness with adjustable red screen glow.\nv$version\nBy Chris M. Sissons\nhttps://github.com/kryptech/Glower',
               style: const TextStyle(fontSize: 16),
-            ),
-            InkWell(
-              onTap: () {
-                _launchURL(Uri.parse(link));
-              },
-              child: Text(
-                link,
-                style: const TextStyle(fontSize: 16),
-              ),
             ),
             const Text(
               '\nHow to Use',
@@ -44,11 +33,5 @@ class AboutPage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-_launchURL(Uri uri) async {
-  if (await canLaunchUrl(uri)) {
-    await launchUrl(uri);
   }
 }
